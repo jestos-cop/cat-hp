@@ -1,0 +1,8 @@
+name: CatHP
+version: '1.0'
+main: org.jestos.catHP.CatHP
+api-version: '1.21'
+commands:
+  cat-hp:
+    use: "/cat-hp"
+    aliases: [chp, hp]

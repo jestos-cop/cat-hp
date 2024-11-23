@@ -1,0 +1,3 @@
+messages:
+  lost-one-hp: "§4§l%player% потерял 1 хп!"
+  lost-all-hp: "§4§l%player% потерял все хп!"
