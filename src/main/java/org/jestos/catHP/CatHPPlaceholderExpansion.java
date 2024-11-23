@@ -44,11 +44,11 @@ public class CatHPPlaceholderExpansion extends PlaceholderExpansion {
         }
 
         if (identifier.equals("hp")) {
-            return String.valueOf(CatHP.getUsersStorage().getConfig().getInt(player.getUniqueId().toString() + ".hp"));
+            return CatHP.getUsersStorage().getConfig().getString(player.getUniqueId() + ".hp");
         }
 
         if (identifier.equals("hp_max")) {
-            return String.valueOf(CatHP.getInstance().getConfig().getInt("max-hp"));
+            return CatHP.getInstance().getConfig().getString("max-hp");
         }
 
         return null;
