@@ -1,6 +1,8 @@
 name: CatHP
 version: '1.0'
 main: org.jestos.catHP.CatHP
+depend:
+  - Vault
 api-version: '1.21'
 commands:
   cat-hp:
