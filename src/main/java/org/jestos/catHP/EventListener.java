@@ -49,6 +49,7 @@ public class EventListener implements Listener {
         int playerHp = CatHP.getUsersStorage().getConfig().getInt(player.getUniqueId() + ".hp");
         if (playerHp < 0) {
             CatHP.getUsersStorage().getConfig().set(player.getUniqueId() + ".hp", 0);
+            playerHp = 0;
         }
         if (playerHp == 0 && player.getGameMode() != GameMode.SPECTATOR) {
             player.setGameMode(GameMode.SPECTATOR);

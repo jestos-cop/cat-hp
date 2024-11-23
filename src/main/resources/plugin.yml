@@ -8,3 +8,23 @@ commands:
   cat-hp:
     usage: "/cat-hp"
     aliases: [chp, hp]
+permissions:
+  cat-hp.reload:
+    description: "Allows using the reload command"
+    default: false
+  cat-hp.buy:
+    description: "Allows using the buy command"
+    default: false
+  cat-hp.set:
+    description: "Allows setting a player's HP"
+    default: false
+  cat-hp.reset:
+    description: "Allows resetting a player's HP"
+    default: false
+  role.admin:
+    description: "Admin role with all permissions"
+    default: op
+    children:
+      cat-hp.reload: true
+      cat-hp.set: true
+      cat-hp.reset: true

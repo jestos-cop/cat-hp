@@ -29,12 +29,20 @@ public class CatHPCommand extends AbstractCommand {
         }
 
         if (args[0].equalsIgnoreCase("reload")) {
+            if (!sender.hasPermission("cat-hp.reload")) {
+                sender.sendMessage(ChatColor.RED + "You do not have permission to use this command.");
+                return;
+            }
             CatHP.getInstance().reloadConfig();
             sender.sendMessage(ChatColor.GREEN + "Configuration reloaded");
             return;
         }
 
         if (args[0].equalsIgnoreCase("buy")) {
+            if (!sender.hasPermission("cat-hp.buy")) {
+                sender.sendMessage(ChatColor.RED + "You do not have permission to use this command.");
+                return;
+            }
             if (!(sender instanceof Player player)) {
                 sender.sendMessage("This command can only be run by a player.");
             } else {
@@ -58,6 +66,10 @@ public class CatHPCommand extends AbstractCommand {
         }
 
         if (args[0].equalsIgnoreCase("set")) {
+            if (!sender.hasPermission("cat-hp.set")) {
+                sender.sendMessage(ChatColor.RED + "You do not have permission to use this command.");
+                return;
+            }
             if (args.length != 3) {
                 sender.sendMessage(ChatColor.RED + "Usage: /" + label + " set <player> <hp>");
                 return;
@@ -89,6 +101,10 @@ public class CatHPCommand extends AbstractCommand {
         }
 
         if (args[0].equalsIgnoreCase("reset")) {
+            if (!sender.hasPermission("cat-hp.reset")) {
+                sender.sendMessage(ChatColor.RED + "You do not have permission to use this command.");
+                return;
+            }
             if (args.length != 2) {
                 sender.sendMessage(ChatColor.RED + "Usage: /" + label + " reset <player>");
                 return;
@@ -114,6 +130,9 @@ public class CatHPCommand extends AbstractCommand {
     public List<String> complete(CommandSender sender, String[] args) {
         if (args.length == 1) {
             return Lists.newArrayList("reload", "buy", "set", "reset");
+        }
+        if (args.length == 2 && (args[0].equalsIgnoreCase("set") || args[0].equalsIgnoreCase("reset"))) {
+            return Bukkit.getOnlinePlayers().stream().map(Player::getName).toList();
         }
         return Lists.newArrayList();
     }
