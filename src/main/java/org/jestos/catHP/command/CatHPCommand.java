@@ -57,7 +57,6 @@ public class CatHPCommand extends AbstractCommand {
 
                 double amount = CatHP.getUsersStorage().getConfig().getInt(player.getUniqueId() + ".buy");
                 double playerBal = CatHP.getEconomy().getBalance(player);
-                EconomyResponse r = CatHP.getEconomy().withdrawPlayer(player, amount);
                 if (playerBal < amount) {
                     String messageSuccess = CatHP.getInstance().getConfig().getString("messages.not-money");
                     if (messageSuccess != null) {
@@ -65,6 +64,9 @@ public class CatHPCommand extends AbstractCommand {
                     }
                     return;
                 }
+
+                EconomyResponse r = CatHP.getEconomy().withdrawPlayer(player, amount);
+
                 if(r.transactionSuccess()) {
                     CatHP.getUsersStorage().getConfig().set(player.getUniqueId() + ".hp", currentHp + 1);
                     CatHP.getUsersStorage().getConfig().set(player.getUniqueId() + ".buy", amount * 2);
