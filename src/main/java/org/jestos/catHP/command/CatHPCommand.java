@@ -4,7 +4,6 @@ import com.google.common.collect.Lists;
 import net.milkbowl.vault.economy.EconomyResponse;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.Color;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
@@ -48,17 +47,39 @@ public class CatHPCommand extends AbstractCommand {
             } else {
                 int currentHp = CatHP.getUsersStorage().getConfig().getInt(player.getUniqueId() + ".hp");
                 int maxHp = CatHP.getInstance().getConfig().getInt("max-hp");
-                if (currentHp <= maxHp) {
-                    sender.sendMessage(CatHP.getInstance().getConfig().getString("messages.buy-max-hp"));
+                if (currentHp >= maxHp) {
+                    String messageMaxHp = CatHP.getInstance().getConfig().getString("messages.buy-max-hp");
+                    if (messageMaxHp != null) {
+                        sender.sendMessage(messageMaxHp);
+                    }
+                    return;
                 }
-                sender.sendMessage(Color.RED + "buy");
 
                 double amount = CatHP.getUsersStorage().getConfig().getInt(player.getUniqueId() + ".buy");
+                double playerBal = CatHP.getEconomy().getBalance(player);
                 EconomyResponse r = CatHP.getEconomy().withdrawPlayer(player, amount);
+                if (playerBal < amount) {
+                    String messageSuccess = CatHP.getInstance().getConfig().getString("messages.not-money");
+                    if (messageSuccess != null) {
+                        sender.sendMessage(messageSuccess);
+                    }
+                    return;
+                }
                 if(r.transactionSuccess()) {
-                    sender.sendMessage(String.format("You were given %s and now have %s", CatHP.getEconomy().format(r.amount), CatHP.getEconomy().format(r.balance)));
+                    CatHP.getUsersStorage().getConfig().set(player.getUniqueId() + ".hp", currentHp + 1);
+                    CatHP.getUsersStorage().getConfig().set(player.getUniqueId() + ".buy", amount * 2);
+                    CatHP.getUsersStorage().save();
+                    String messageSuccess = CatHP.getInstance().getConfig().getString("messages.success-buy");
+                    if (messageSuccess != null) {
+                        messageSuccess = messageSuccess.replace("{amount}", String.valueOf(amount));
+                        sender.sendMessage(messageSuccess);
+                    }
                 } else {
-                    sender.sendMessage(String.format("An error occured: %s", r.errorMessage));
+                    String messageSuccess = CatHP.getInstance().getConfig().getString("messages.failed-buy");
+                    if (messageSuccess != null) {
+                        messageSuccess = messageSuccess.replace("{error}", r.errorMessage);
+                        sender.sendMessage(messageSuccess);
+                    }
                 }
             }
 

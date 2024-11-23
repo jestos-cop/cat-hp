@@ -1,7 +1,10 @@
 messages:
-  lost-one-hp: "§4§l%player% потерял 1 хп!"
-  lost-all-hp: "§4§l%player% потерял все хп!"
-  buy-max-hp: "§4§lУ вас максимально хп!"
+  lost-one-hp: "§4§l%player% втратив 1 життя!"
+  lost-all-hp: "§4§l%player% втратив всі життя!"
+  buy-max-hp: "§4§lУ вас максимально життів!"
+  success-buy: "§a§lВи успішно купили 1 життя за {amount}!"
+  failed-buy: "§4§lСталася помилка: {error}"
+  not-money: "§4§lУ вас не достатньо коштів"
 
 max-hp: 9
 start-price: 250
