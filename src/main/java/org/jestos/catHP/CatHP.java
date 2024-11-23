@@ -15,8 +15,11 @@ public final class CatHP extends JavaPlugin {
     public void onEnable() {
         instance = this;
         log = this.getLogger();
-        usersStorage = new Storage("users.yml");
         saveDefaultConfig();
+        usersStorage = new Storage("users.yml");
+        if (getServer().getPluginManager().getPlugin("PlaceholderAPI") != null) {
+            new CatHPPlaceholderExpansion(this).register();
+        }
 
         new CatHPCommand();
 

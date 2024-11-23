@@ -16,7 +16,8 @@ public class EventListener implements Listener {
         String playerConfig = CatHP.getUsersStorage().getConfig().getString(player.getUniqueId().toString());
         CatHP.logger().info("Player config: " + playerConfig);
         if (playerConfig == null) {
-            CatHP.getUsersStorage().getConfig().set(player.getUniqueId().toString() + ".hp", 9);
+            int maxHp = CatHP.getInstance().getConfig().getInt("max-hp");
+            CatHP.getUsersStorage().getConfig().set(player.getUniqueId().toString() + ".hp", maxHp);
             CatHP.getUsersStorage().getConfig().set(player.getUniqueId().toString() + ".buy", 250);
             CatHP.getUsersStorage().save();
         } else {
