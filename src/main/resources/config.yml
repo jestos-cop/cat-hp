@@ -9,3 +9,7 @@ messages:
 max-hp: 9
 start-price: 250
 default-hp: 9
+
+worlds:
+  - world_nether
+  - dungeon

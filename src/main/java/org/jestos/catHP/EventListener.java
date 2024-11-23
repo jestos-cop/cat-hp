@@ -2,13 +2,41 @@ package org.jestos.catHP;
 
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
+import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 
+import java.util.List;
+
 public class EventListener implements Listener {
+
+    @EventHandler
+    public void onPlayerChangedWorld(PlayerChangedWorldEvent event) {
+        Player player = event.getPlayer();
+        int hp = CatHP.getUsersStorage().getConfig().getInt(player.getUniqueId() + ".hp");
+        if (hp <= 0) {
+            player.setGameMode(GameMode.SPECTATOR);
+            return;
+        }
+
+        String fromWorld = event.getFrom().getName();
+        String toWorld = player.getWorld().getName();
+        List<String> worlds = CatHP.getInstance().getConfig().getStringList("worlds");
+
+        if (worlds.contains(toWorld)) {
+            CatHP.getUsersStorage().getConfig().set(player.getUniqueId() + ".previous-gamemode", player.getGameMode().name());
+            player.setGameMode(GameMode.ADVENTURE);
+        } else if (worlds.contains(fromWorld)) {
+            String previousGameMode = CatHP.getUsersStorage().getConfig().getString(player.getUniqueId() + ".previous-gamemode", GameMode.SURVIVAL.name());
+            player.setGameMode(GameMode.valueOf(previousGameMode));
+        }
+        CatHP.getUsersStorage().save();
+    }
 
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
@@ -31,14 +59,10 @@ public class EventListener implements Listener {
         if (playerHp != null) {
             if (playerHp <= 1) {
                 CatHP.getUsersStorage().getConfig().set(player.getUniqueId() + ".hp", 0);
-                String message = CatHP.getInstance().getConfig().getString("messages.lost-all-hp");
-                message = message.replace("%player%", player.getName());
-                Bukkit.broadcastMessage(message);
+                sendMessage("messages.lost-all-hp", player.getName());
             } else {
                 CatHP.getUsersStorage().getConfig().set(player.getUniqueId() + ".hp", playerHp - 1);
-                String message = CatHP.getInstance().getConfig().getString("messages.lost-one-hp");
-                message = message.replace("%player%", player.getName());
-                Bukkit.broadcastMessage(message);
+                sendMessage("messages.lost-one-hp", player.getName());
             }
             CatHP.getUsersStorage().save();
             checkAndSetSpectatorMode(player);
@@ -52,7 +76,19 @@ public class EventListener implements Listener {
             playerHp = 0;
         }
         if (playerHp == 0 && player.getGameMode() != GameMode.SPECTATOR) {
-            player.setGameMode(GameMode.SPECTATOR);
+            setGameModeAndGroup(player, GameMode.SPECTATOR);
+        }
+    }
+
+    private void setGameModeAndGroup(Player player, GameMode gameMode) {
+        player.setGameMode(gameMode);
+    }
+
+    private void sendMessage(String configPath, String playerName) {
+        String message = CatHP.getInstance().getConfig().getString(configPath);
+        if (message != null) {
+            message = message.replace("%player%", playerName);
+            Bukkit.broadcastMessage(message);
         }
     }
 }
