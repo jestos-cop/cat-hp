@@ -1,8 +1,10 @@
 package org.jestos.catHP.command;
 
 import com.google.common.collect.Lists;
+import net.milkbowl.vault.economy.EconomyResponse;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Color;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
@@ -33,7 +35,25 @@ public class CatHPCommand extends AbstractCommand {
         }
 
         if (args[0].equalsIgnoreCase("buy")) {
-            sender.sendMessage(ChatColor.GREEN + "buy");
+            if (!(sender instanceof Player player)) {
+                sender.sendMessage("This command can only be run by a player.");
+            } else {
+                int currentHp = CatHP.getUsersStorage().getConfig().getInt(player.getUniqueId() + ".hp");
+                int maxHp = CatHP.getInstance().getConfig().getInt("max-hp");
+                if (currentHp <= maxHp) {
+                    sender.sendMessage(CatHP.getInstance().getConfig().getString("messages.buy-max-hp"));
+                }
+                sender.sendMessage(Color.RED + "buy");
+
+                double amount = CatHP.getUsersStorage().getConfig().getInt(player.getUniqueId() + ".buy");
+                EconomyResponse r = CatHP.getEconomy().withdrawPlayer(player, amount);
+                if(r.transactionSuccess()) {
+                    sender.sendMessage(String.format("You were given %s and now have %s", CatHP.getEconomy().format(r.amount), CatHP.getEconomy().format(r.balance)));
+                } else {
+                    sender.sendMessage(String.format("An error occured: %s", r.errorMessage));
+                }
+            }
+
             return;
         }
 

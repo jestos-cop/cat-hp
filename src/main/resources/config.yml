@@ -1,6 +1,8 @@
 messages:
   lost-one-hp: "§4§l%player% потерял 1 хп!"
   lost-all-hp: "§4§l%player% потерял все хп!"
+  buy-max-hp: "§4§lУ вас максимально хп!"
 
 max-hp: 9
 start-price: 250
+default-hp: 9
