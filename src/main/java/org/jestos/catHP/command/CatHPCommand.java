@@ -23,10 +23,12 @@ public class CatHPCommand extends AbstractCommand {
         if (args[0].equalsIgnoreCase("reload")) {
             CatHP.getInstance().reloadConfig();
             sender.sendMessage(ChatColor.GREEN + "Configuration reloaded");
+            return;
         }
 
         if (args[0].equalsIgnoreCase("buy")) {
             sender.sendMessage(ChatColor.GREEN + "buy");
+            return;
         }
     }
 

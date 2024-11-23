@@ -4,5 +4,5 @@ main: org.jestos.catHP.CatHP
 api-version: '1.21'
 commands:
   cat-hp:
-    use: "/cat-hp"
+    usage: "/cat-hp"
     aliases: [chp, hp]
