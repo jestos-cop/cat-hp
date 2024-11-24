@@ -43,6 +43,9 @@ public class CatHPCommand extends AbstractCommand {
             case "info":
                 handleInfo(sender);
                 break;
+            case "help":
+                handleHelp(sender, label);
+                break;
             default:
                 sendUsage(sender, label);
                 break;
@@ -50,12 +53,34 @@ public class CatHPCommand extends AbstractCommand {
     }
 
     private void sendUsage(CommandSender sender, String label) {
-        sendMessage(sender, "messages.usage-reload", label);
-        sendMessage(sender, "messages.usage-buy", label);
-        sendMessage(sender, "messages.usage-set", label);
-        sendMessage(sender, "messages.usage-reset", label);
-        sendMessage(sender, "messages.usage-resetbuy", label);
-        sendMessage(sender, "messages.usage-info", label);
+        handleHelp(sender, label);
+    }
+
+    private void handleHelp(CommandSender sender, String label) {
+        if (!sender.hasPermission("cat-hp.help")) {
+            sendMessage(sender, "messages.no-permission");
+            return;
+        }
+        sendMessage(sender, "messages.help-header");
+        if (sender.hasPermission("cat-hp.info")) {
+            sendMessage(sender, "messages.help-info", label);
+        }
+        if (sender.hasPermission("cat-hp.buy")) {
+            sendMessage(sender, "messages.help-buy", label);
+        }
+        if (sender.hasPermission("cat-hp.reload")) {
+            sendMessage(sender, "messages.help-reload", label);
+        }
+        if (sender.hasPermission("cat-hp.set")) {
+            sendMessage(sender, "messages.help-set", label);
+        }
+        if (sender.hasPermission("cat-hp.reset")) {
+            sendMessage(sender, "messages.help-reset", label);
+        }
+        if (sender.hasPermission("cat-hp.resetbuy")) {
+            sendMessage(sender, "messages.help-resetbuy", label);
+        }
+        sendMessage(sender, "messages.help-footer");
     }
 
     private void handleInfo(CommandSender sender) {
@@ -222,7 +247,7 @@ public class CatHPCommand extends AbstractCommand {
     @Override
     public List<String> complete(CommandSender sender, String[] args) {
         if (args.length == 1) {
-            return Lists.newArrayList("reload", "buy", "set", "reset", "resetbuy", "info");
+            return Lists.newArrayList("help", "reload", "buy", "set", "reset", "resetbuy", "info");
         }
         if (args.length == 2) {
             switch (args[0].toLowerCase()) {

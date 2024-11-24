@@ -9,6 +9,9 @@ commands:
     usage: "/cat-hp"
     aliases: [chp, hp]
 permissions:
+  cat-hp.help:
+    description: "Allows using the help command"
+    default: false
   cat-hp.reload:
     description: "Allows using the reload command"
     default: false
@@ -31,6 +34,7 @@ permissions:
     description: "Admin role with all permissions"
     default: op
     children:
+      cat-hp.help: true
       cat-hp.reload: true
       cat-hp.buy: true
       cat-hp.resetbuy: true
